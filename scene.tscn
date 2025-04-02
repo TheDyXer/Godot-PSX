@@ -1,0 +1,53 @@
+[gd_scene load_steps=11 format=3 uid="uid://bv7dsd2m7qlaq"]
+
+[ext_resource type="Shader" path="res://unlit.gdshader" id="1_6tmq6"]
+[ext_resource type="Shader" path="res://playstation_one.gdshader" id="1_btf8r"]
+[ext_resource type="Script" path="res://rotate.gd" id="2_ekg6g"]
+[ext_resource type="Texture2D" uid="uid://bsbqgbco1677k" path="res://tile.png" id="2_fdvw8"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_8eck0"]
+render_priority = 0
+shader = ExtResource("1_btf8r")
+shader_parameter/color_texture = ExtResource("2_fdvw8")
+
+[sub_resource type="BoxMesh" id="BoxMesh_3ta6q"]
+material = SubResource("ShaderMaterial_8eck0")
+
+[sub_resource type="Environment" id="Environment_teuiq"]
+background_energy_multiplier = 0.0
+ambient_light_energy = 0.0
+
+[sub_resource type="CameraAttributesPractical" id="CameraAttributesPractical_ge1bv"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_0igg6"]
+render_priority = 0
+shader = ExtResource("1_6tmq6")
+shader_parameter/color_texture = ExtResource("2_fdvw8")
+
+[sub_resource type="BoxMesh" id="BoxMesh_ti2t3"]
+material = SubResource("ShaderMaterial_0igg6")
+
+[node name="Node3D" type="Node3D"]
+
+[node name="Camera3D" type="Camera3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.21354, 0.0887378, 1.77438)
+size = 2.50021
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+transform = Transform3D(0.604627, 0.796509, 0, -0.796509, 0.604627, 0, 0, 0, 1, 1.88933, 0, 0)
+mesh = SubResource("BoxMesh_3ta6q")
+script = ExtResource("2_ekg6g")
+rotation_speed = Vector3(20, 20, 20)
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0.723449, 0.690377, 0, -0.690377, 0.723449, 0.954669, 1.12925, 3.35693)
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_teuiq")
+camera_attributes = SubResource("CameraAttributesPractical_ge1bv")
+
+[node name="MeshInstance3D2" type="MeshInstance3D" parent="."]
+transform = Transform3D(0.604627, 0.796509, 0, -0.796509, 0.604627, 0, 0, 0, 1, 0.303653, 0, 0)
+mesh = SubResource("BoxMesh_ti2t3")
+script = ExtResource("2_ekg6g")
+rotation_speed = Vector3(20, 20, 20)
