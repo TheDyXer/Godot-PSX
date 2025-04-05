@@ -13,11 +13,12 @@ void vertex() {
 	POSITION = vertex;
 	clip_pos = vertex;
 	
-	UV = UV * vec2(3.0, 2.0) * clip_pos.w;
+	//UV = UV * vec2(3.0, 2.0)
+	UV = UV * 10.0 * clip_pos.w;
 }
 
 void fragment() {
-	ALBEDO = texture(color_texture, UV / clip_pos.w).rgb;
+	ALBEDO = pow(texture(color_texture, UV / clip_pos.w).rgb, vec3(2.2));
 }
 
 void light() {

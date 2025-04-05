@@ -1,9 +1,11 @@
-[gd_scene load_steps=11 format=3 uid="uid://bv7dsd2m7qlaq"]
+[gd_scene load_steps=15 format=3 uid="uid://bv7dsd2m7qlaq"]
 
 [ext_resource type="Shader" path="res://unlit.gdshader" id="1_6tmq6"]
 [ext_resource type="Shader" path="res://playstation_one.gdshader" id="1_btf8r"]
+[ext_resource type="Script" path="res://simple_camera_controller.gd" id="1_fm4x5"]
 [ext_resource type="Script" path="res://rotate.gd" id="2_ekg6g"]
 [ext_resource type="Texture2D" uid="uid://bsbqgbco1677k" path="res://tile.png" id="2_fdvw8"]
+[ext_resource type="PackedScene" uid="uid://c3yabv6fibd2n" path="res://psx_terrain.tscn" id="5_fcwvy"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_8eck0"]
 render_priority = 0
@@ -12,6 +14,9 @@ shader_parameter/color_texture = ExtResource("2_fdvw8")
 
 [sub_resource type="BoxMesh" id="BoxMesh_3ta6q"]
 material = SubResource("ShaderMaterial_8eck0")
+subdivide_width = 2
+subdivide_height = 2
+subdivide_depth = 2
 
 [sub_resource type="Environment" id="Environment_teuiq"]
 background_energy_multiplier = 0.0
@@ -27,14 +32,22 @@ shader_parameter/color_texture = ExtResource("2_fdvw8")
 [sub_resource type="BoxMesh" id="BoxMesh_ti2t3"]
 material = SubResource("ShaderMaterial_0igg6")
 
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ecbt4"]
+albedo_color = Color(0.0828059, 0.425998, 0.667031, 1)
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_xdvk6"]
+material = SubResource("StandardMaterial3D_ecbt4")
+
 [node name="Node3D" type="Node3D"]
 
 [node name="Camera3D" type="Camera3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.21354, 0.0887378, 1.77438)
+transform = Transform3D(0.998653, 0, -0.0518827, 0.0163527, 0.94903, 0.314761, 0.0492383, -0.315185, 0.947752, -8.02408, 12.7474, 48.4485)
 size = 2.50021
+script = ExtResource("1_fm4x5")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="."]
-transform = Transform3D(0.604627, 0.796509, 0, -0.796509, 0.604627, 0, 0, 0, 1, 1.88933, 0, 0)
+transform = Transform3D(0.604627, 0.796509, 0, -0.796509, 0.604627, 0, 0, 0, 1, 0, 0, 0)
+visible = false
 mesh = SubResource("BoxMesh_3ta6q")
 script = ExtResource("2_ekg6g")
 rotation_speed = Vector3(20, 20, 20)
@@ -48,6 +61,13 @@ camera_attributes = SubResource("CameraAttributesPractical_ge1bv")
 
 [node name="MeshInstance3D2" type="MeshInstance3D" parent="."]
 transform = Transform3D(0.604627, 0.796509, 0, -0.796509, 0.604627, 0, 0, 0, 1, 0.303653, 0, 0)
+visible = false
 mesh = SubResource("BoxMesh_ti2t3")
 script = ExtResource("2_ekg6g")
 rotation_speed = Vector3(20, 20, 20)
+
+[node name="psx_terrain" parent="." instance=ExtResource("5_fcwvy")]
+
+[node name="MeshInstance3D3" type="MeshInstance3D" parent="."]
+transform = Transform3D(100, 0, 0, 0, 100, 0, 0, 0, 45, 0, -1.93844, 0)
+mesh = SubResource("PlaneMesh_xdvk6")

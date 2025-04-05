@@ -1,0 +1,15 @@
+[gd_scene load_steps=5 format=3 uid="uid://c3yabv6fibd2n"]
+
+[ext_resource type="PackedScene" uid="uid://cdvq0qwp032sf" path="res://psx_terrain.glb" id="1_kqehl"]
+[ext_resource type="Shader" path="res://playstation_one.gdshader" id="2_3ulpw"]
+[ext_resource type="Texture2D" uid="uid://b1gp3e8n4a32p" path="res://sno3.png" id="3_yeep3"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_03v3s"]
+render_priority = 0
+shader = ExtResource("2_3ulpw")
+shader_parameter/color_texture = ExtResource("3_yeep3")
+
+[node name="psx_terrain" instance=ExtResource("1_kqehl")]
+
+[node name="Plane" parent="." index="0"]
+surface_material_override/0 = SubResource("ShaderMaterial_03v3s")
