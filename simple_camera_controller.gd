@@ -45,6 +45,8 @@ func _process(delta: float) -> void:
 	if Input.is_key_pressed(KEY_SHIFT):
 		translation *= 10.0;
 
+	translation *= pow(2.0, boost);
+
 	target_camera_state.Translate(translation);
 
 	var positionLerpPct = 1.0 - exp((log(1.0 - 0.99) / position_lerp_time) * delta);
@@ -54,6 +56,13 @@ func _process(delta: float) -> void:
 	self.position = interpolating_camera_state.GetCameraPosition()
 
 func _input(event: InputEvent) -> void:
+	if event is InputEventMouseButton:
+		if event.button_index == MOUSE_BUTTON_WHEEL_UP:
+			boost += 0.2;
+		elif event.button_index == MOUSE_BUTTON_WHEEL_DOWN:
+			boost -= 0.2;
+
+	
 	if event is InputEventMouseMotion and Input.is_mouse_button_pressed(MOUSE_BUTTON_RIGHT):
 		var mouse_movement = event.relative * get_process_delta_time()
 

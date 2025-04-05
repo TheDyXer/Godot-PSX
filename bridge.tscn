@@ -1,0 +1,14 @@
+[gd_scene load_steps=4 format=3 uid="uid://c7bcg0r53m6bs"]
+
+[ext_resource type="PackedScene" uid="uid://cpigjo1c7yjgf" path="res://bridge.glb" id="1_qxpoc"]
+[ext_resource type="Shader" path="res://playstation_one.gdshader" id="2_ndwap"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_ary1p"]
+render_priority = 0
+shader = ExtResource("2_ndwap")
+shader_parameter/tint = Color(0.306119, 0.166281, 0.0962159, 1)
+
+[node name="bridge" instance=ExtResource("1_qxpoc")]
+
+[node name="Right Supports" parent="." index="0"]
+surface_material_override/0 = SubResource("ShaderMaterial_ary1p")

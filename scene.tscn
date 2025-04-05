@@ -1,4 +1,4 @@
-[gd_scene load_steps=15 format=3 uid="uid://bv7dsd2m7qlaq"]
+[gd_scene load_steps=16 format=3 uid="uid://bv7dsd2m7qlaq"]
 
 [ext_resource type="Shader" path="res://unlit.gdshader" id="1_6tmq6"]
 [ext_resource type="Shader" path="res://playstation_one.gdshader" id="1_btf8r"]
@@ -6,10 +6,12 @@
 [ext_resource type="Script" path="res://rotate.gd" id="2_ekg6g"]
 [ext_resource type="Texture2D" uid="uid://bsbqgbco1677k" path="res://tile.png" id="2_fdvw8"]
 [ext_resource type="PackedScene" uid="uid://c3yabv6fibd2n" path="res://psx_terrain.tscn" id="5_fcwvy"]
+[ext_resource type="PackedScene" uid="uid://c7bcg0r53m6bs" path="res://bridge.tscn" id="7_0x3if"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_8eck0"]
 render_priority = 0
 shader = ExtResource("1_btf8r")
+shader_parameter/tint = Color(1, 1, 1, 1)
 shader_parameter/color_texture = ExtResource("2_fdvw8")
 
 [sub_resource type="BoxMesh" id="BoxMesh_3ta6q"]
@@ -32,11 +34,13 @@ shader_parameter/color_texture = ExtResource("2_fdvw8")
 [sub_resource type="BoxMesh" id="BoxMesh_ti2t3"]
 material = SubResource("ShaderMaterial_0igg6")
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ecbt4"]
-albedo_color = Color(0.0828059, 0.425998, 0.667031, 1)
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_gbew5"]
+render_priority = 0
+shader = ExtResource("1_btf8r")
+shader_parameter/tint = Color(0.113459, 0.575767, 0.741046, 1)
 
 [sub_resource type="PlaneMesh" id="PlaneMesh_xdvk6"]
-material = SubResource("StandardMaterial3D_ecbt4")
+material = SubResource("ShaderMaterial_gbew5")
 
 [node name="Node3D" type="Node3D"]
 
@@ -71,3 +75,5 @@ rotation_speed = Vector3(20, 20, 20)
 [node name="MeshInstance3D3" type="MeshInstance3D" parent="."]
 transform = Transform3D(100, 0, 0, 0, 100, 0, 0, 0, 45, 0, -1.93844, 0)
 mesh = SubResource("PlaneMesh_xdvk6")
+
+[node name="bridge" parent="." instance=ExtResource("7_0x3if")]

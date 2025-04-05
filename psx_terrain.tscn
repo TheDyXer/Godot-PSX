@@ -4,12 +4,13 @@
 [ext_resource type="Shader" path="res://playstation_one.gdshader" id="2_3ulpw"]
 [ext_resource type="Texture2D" uid="uid://b1gp3e8n4a32p" path="res://sno3.png" id="3_yeep3"]
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_03v3s"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_dtx4f"]
 render_priority = 0
 shader = ExtResource("2_3ulpw")
+shader_parameter/tint = Color(0.898039, 0.952941, 1, 1)
 shader_parameter/color_texture = ExtResource("3_yeep3")
 
 [node name="psx_terrain" instance=ExtResource("1_kqehl")]
 
-[node name="Plane" parent="." index="0"]
-surface_material_override/0 = SubResource("ShaderMaterial_03v3s")
+[node name="Terrain" parent="." index="0"]
+surface_material_override/0 = SubResource("ShaderMaterial_dtx4f")
