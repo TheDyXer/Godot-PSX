@@ -25,21 +25,24 @@ void vertex() {
 	clip_pos = vertex;
 	
 	// Calculate vertex distance from camera
-	view_distance = length(CAMERA_POSITION_WORLD - world_space.xyz);
+	view_distance = length(CAMERA_POSITION_WORLD - world_space.xyz) * clip.w;
 	
 	//UV = UV * vec2(3.0, 2.0)
 	UV = UV * clip_pos.w;
 	NORMAL = MODEL_NORMAL_MATRIX * NORMAL;
+	COLOR *= clip.w;
 }
 
 void fragment() {
 	// Calculate linear fog factor
-	float fog_factor = (fog_start_end.y - view_distance) / (fog_start_end.y - fog_start_end.x);
+	float fog_factor = (fog_start_end.y - (view_distance / clip_pos.w)) / (fog_start_end.y - fog_start_end.x);
 	fog_factor = 1.0 - clamp(fog_factor, 0.0, 1.0);
 	
 	vec3 texture_color = texture(color_texture, (UV / clip_pos.w) * 10.0).rgb * tint;
 	
-	ALBEDO = mix(texture_color, fog_color, fog_factor);
+	vec3 vertex_color = COLOR.rgb / clip_pos.w;
+	
+	ALBEDO = mix(texture_color * vertex_color, fog_color, fog_factor);
 	//ALBEDO = pow(ALBEDO, vec3(2.2));
 	
 	//ALBEDO = vec3(fog_factor);

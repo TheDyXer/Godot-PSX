@@ -41,7 +41,7 @@ render_priority = 0
 shader = ExtResource("1_btf8r")
 shader_parameter/tint = Color(0.113459, 0.575767, 0.741046, 1)
 shader_parameter/fog_start_end = Vector2(0, 150)
-shader_parameter/fog_color = Color(0.42, 0.39, 0.45, 1)
+shader_parameter/fog_color = Color(0.309804, 0.286275, 0.239216, 1)
 
 [sub_resource type="PlaneMesh" id="PlaneMesh_xdvk6"]
 material = SubResource("ShaderMaterial_gbew5")
@@ -51,7 +51,7 @@ render_priority = 0
 shader = ExtResource("1_btf8r")
 shader_parameter/tint = Color(0, 0, 0, 1)
 shader_parameter/fog_start_end = Vector2(10, 100)
-shader_parameter/fog_color = Color(0.42, 0.39, 0.45, 1)
+shader_parameter/fog_color = Color(0.31, 0.286233, 0.2387, 1)
 
 [sub_resource type="QuadMesh" id="QuadMesh_wr3iy"]
 material = SubResource("ShaderMaterial_lkm78")
@@ -60,6 +60,7 @@ material = SubResource("ShaderMaterial_lkm78")
 
 [node name="Camera3D" type="Camera3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0605178, 6.66395, 65.4753)
+fov = 80.0
 size = 2.50021
 script = ExtResource("1_fm4x5")
 
