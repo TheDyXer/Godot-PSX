@@ -1,4 +1,4 @@
-[gd_scene load_steps=16 format=3 uid="uid://bv7dsd2m7qlaq"]
+[gd_scene load_steps=18 format=3 uid="uid://bv7dsd2m7qlaq"]
 
 [ext_resource type="Shader" path="res://unlit.gdshader" id="1_6tmq6"]
 [ext_resource type="Shader" path="res://playstation_one.gdshader" id="1_btf8r"]
@@ -12,6 +12,8 @@
 render_priority = 0
 shader = ExtResource("1_btf8r")
 shader_parameter/tint = Color(1, 1, 1, 1)
+shader_parameter/fog_start_end = Vector2(1, 35)
+shader_parameter/fog_color = Color(0.42, 0.39, 0.45, 1)
 shader_parameter/color_texture = ExtResource("2_fdvw8")
 
 [sub_resource type="BoxMesh" id="BoxMesh_3ta6q"]
@@ -38,14 +40,26 @@ material = SubResource("ShaderMaterial_0igg6")
 render_priority = 0
 shader = ExtResource("1_btf8r")
 shader_parameter/tint = Color(0.113459, 0.575767, 0.741046, 1)
+shader_parameter/fog_start_end = Vector2(0, 150)
+shader_parameter/fog_color = Color(0.42, 0.39, 0.45, 1)
 
 [sub_resource type="PlaneMesh" id="PlaneMesh_xdvk6"]
 material = SubResource("ShaderMaterial_gbew5")
 
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_lkm78"]
+render_priority = 0
+shader = ExtResource("1_btf8r")
+shader_parameter/tint = Color(0, 0, 0, 1)
+shader_parameter/fog_start_end = Vector2(10, 100)
+shader_parameter/fog_color = Color(0.42, 0.39, 0.45, 1)
+
+[sub_resource type="QuadMesh" id="QuadMesh_wr3iy"]
+material = SubResource("ShaderMaterial_lkm78")
+
 [node name="Node3D" type="Node3D"]
 
 [node name="Camera3D" type="Camera3D" parent="."]
-transform = Transform3D(0.998653, 0, -0.0518827, 0.0163527, 0.94903, 0.314761, 0.0492383, -0.315185, 0.947752, -8.02408, 12.7474, 48.4485)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0605178, 6.66395, 65.4753)
 size = 2.50021
 script = ExtResource("1_fm4x5")
 
@@ -77,3 +91,19 @@ transform = Transform3D(100, 0, 0, 0, 100, 0, 0, 0, 45, 0, -1.93844, 0)
 mesh = SubResource("PlaneMesh_xdvk6")
 
 [node name="bridge" parent="." instance=ExtResource("7_0x3if")]
+
+[node name="MeshInstance3D4" type="MeshInstance3D" parent="."]
+transform = Transform3D(-8.74228e-06, -200, 0, 200, -8.74228e-06, 0, 0, 0, 200, 0, 0, -96.5056)
+mesh = SubResource("QuadMesh_wr3iy")
+
+[node name="MeshInstance3D5" type="MeshInstance3D" parent="."]
+transform = Transform3D(3.82137e-13, 8.74228e-06, 200, 200, -8.74228e-06, 0, 8.74228e-06, 200, -8.74228e-06, -93.8415, 0, -3.61224)
+mesh = SubResource("QuadMesh_wr3iy")
+
+[node name="MeshInstance3D6" type="MeshInstance3D" parent="."]
+transform = Transform3D(3.82137e-13, 8.74228e-06, -200, 200, -8.74228e-06, 0, -8.74228e-06, -200, -8.74228e-06, 90.5073, 0, -2.60207)
+mesh = SubResource("QuadMesh_wr3iy")
+
+[node name="MeshInstance3D7" type="MeshInstance3D" parent="."]
+transform = Transform3D(200, 0, 0, 0, -8.74228e-06, -200, 0, 200, -8.74228e-06, 0, 96.845, -12.8846)
+mesh = SubResource("QuadMesh_wr3iy")

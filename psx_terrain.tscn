@@ -8,6 +8,8 @@
 render_priority = 0
 shader = ExtResource("2_3ulpw")
 shader_parameter/tint = Color(0.898039, 0.952941, 1, 1)
+shader_parameter/fog_start_end = Vector2(0, 150)
+shader_parameter/fog_color = Color(0.42, 0.39, 0.45, 1)
 shader_parameter/color_texture = ExtResource("3_yeep3")
 
 [node name="psx_terrain" instance=ExtResource("1_kqehl")]

@@ -7,6 +7,8 @@
 render_priority = 0
 shader = ExtResource("2_ndwap")
 shader_parameter/tint = Color(0.306119, 0.166281, 0.0962159, 1)
+shader_parameter/fog_start_end = Vector2(0, 150)
+shader_parameter/fog_color = Color(0.42, 0.39, 0.45, 1)
 
 [node name="bridge" instance=ExtResource("1_qxpoc")]
 
