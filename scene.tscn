@@ -1,23 +1,46 @@
-[gd_scene load_steps=18 format=3 uid="uid://bv7dsd2m7qlaq"]
+[gd_scene load_steps=20 format=3 uid="uid://bv7dsd2m7qlaq"]
 
 [ext_resource type="Shader" path="res://unlit.gdshader" id="1_6tmq6"]
 [ext_resource type="Shader" path="res://playstation_one.gdshader" id="1_btf8r"]
-[ext_resource type="Script" path="res://simple_camera_controller.gd" id="1_fm4x5"]
+[ext_resource type="Script" path="res://simple_camera_controller.gd" id="1_shf63"]
 [ext_resource type="Script" path="res://rotate.gd" id="2_ekg6g"]
-[ext_resource type="Texture2D" uid="uid://bsbqgbco1677k" path="res://tile.png" id="2_fdvw8"]
 [ext_resource type="PackedScene" uid="uid://c3yabv6fibd2n" path="res://psx_terrain.tscn" id="5_fcwvy"]
-[ext_resource type="PackedScene" uid="uid://c7bcg0r53m6bs" path="res://bridge.tscn" id="7_0x3if"]
+[ext_resource type="PackedScene" uid="uid://b5ellqltyo0oc" path="res://bridge.tscn" id="7_qho57"]
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_8eck0"]
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_qktft"]
+emission_shape_offset = Vector3(0, 10, 0)
+emission_shape_scale = Vector3(20, 0, 20)
+emission_shape = 3
+emission_box_extents = Vector3(1, 1, 1)
+direction = Vector3(0.75, -1, -0.1)
+spread = 21.774
+initial_velocity_min = 8.0
+initial_velocity_max = 13.5
+gravity = Vector3(0, 0, 0)
+turbulence_noise_strength = 0.1
+turbulence_influence_min = 0.251
+turbulence_influence_max = 0.298
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_6c344"]
 render_priority = 0
 shader = ExtResource("1_btf8r")
-shader_parameter/tint = Color(1, 1, 1, 1)
-shader_parameter/fog_start_end = Vector2(1, 35)
-shader_parameter/fog_color = Color(0.42, 0.39, 0.45, 1)
-shader_parameter/color_texture = ExtResource("2_fdvw8")
+shader_parameter/billboard = true
+shader_parameter/tint = Color(0.419608, 0.380392, 0.317647, 1)
+shader_parameter/fog_start_end = Vector2(0, 10)
+shader_parameter/fog_color = Color(0.25, 0.242083, 0.2025, 1)
+shader_parameter/add_dynamic_vertex_lighting = false
+shader_parameter/light_direction = Vector3(0, 1, 0)
+shader_parameter/light_intensity = 1.0
+shader_parameter/ambient_light = Color(0, 0, 0, 1)
+
+[sub_resource type="QuadMesh" id="QuadMesh_cpdto"]
+material = SubResource("ShaderMaterial_6c344")
+size = Vector2(0.075, 0.075)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_k15i2"]
 
 [sub_resource type="BoxMesh" id="BoxMesh_3ta6q"]
-material = SubResource("ShaderMaterial_8eck0")
+material = SubResource("ShaderMaterial_k15i2")
 subdivide_width = 2
 subdivide_height = 2
 subdivide_depth = 2
@@ -31,7 +54,6 @@ ambient_light_energy = 0.0
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_0igg6"]
 render_priority = 0
 shader = ExtResource("1_6tmq6")
-shader_parameter/color_texture = ExtResource("2_fdvw8")
 
 [sub_resource type="BoxMesh" id="BoxMesh_ti2t3"]
 material = SubResource("ShaderMaterial_0igg6")
@@ -39,19 +61,31 @@ material = SubResource("ShaderMaterial_0igg6")
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_gbew5"]
 render_priority = 0
 shader = ExtResource("1_btf8r")
-shader_parameter/tint = Color(0.113459, 0.575767, 0.741046, 1)
-shader_parameter/fog_start_end = Vector2(0, 150)
-shader_parameter/fog_color = Color(0.309804, 0.286275, 0.239216, 1)
+shader_parameter/billboard = false
+shader_parameter/tint = Color(0.0056683, 0.0322398, 0.0460638, 1)
+shader_parameter/fog_start_end = Vector2(0, 80)
+shader_parameter/fog_color = Color(0.219608, 0.211765, 0.172549, 1)
+shader_parameter/add_dynamic_vertex_lighting = true
+shader_parameter/light_direction = Vector3(0, 1, 0)
+shader_parameter/light_intensity = 1.0
+shader_parameter/ambient_light = Color(0, 0, 0, 1)
 
 [sub_resource type="PlaneMesh" id="PlaneMesh_xdvk6"]
 material = SubResource("ShaderMaterial_gbew5")
+subdivide_width = 20
+subdivide_depth = 15
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_lkm78"]
 render_priority = 0
 shader = ExtResource("1_btf8r")
-shader_parameter/tint = Color(0, 0, 0, 1)
+shader_parameter/billboard = false
+shader_parameter/tint = Color(0.219608, 0.211765, 0.172549, 1)
 shader_parameter/fog_start_end = Vector2(10, 100)
-shader_parameter/fog_color = Color(0.31, 0.286233, 0.2387, 1)
+shader_parameter/fog_color = Color(0.22, 0.21076, 0.1738, 1)
+shader_parameter/add_dynamic_vertex_lighting = true
+shader_parameter/light_direction = Vector3(0, 1, 0)
+shader_parameter/light_intensity = 1.0
+shader_parameter/ambient_light = Color(0, 0, 0, 1)
 
 [sub_resource type="QuadMesh" id="QuadMesh_wr3iy"]
 material = SubResource("ShaderMaterial_lkm78")
@@ -59,10 +93,25 @@ material = SubResource("ShaderMaterial_lkm78")
 [node name="Node3D" type="Node3D"]
 
 [node name="Camera3D" type="Camera3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0605178, 6.66395, 65.4753)
-fov = 80.0
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.778385, 6.23872, 60.7201)
+fov = 60.0
 size = 2.50021
-script = ExtResource("1_fm4x5")
+script = ExtResource("1_shf63")
+
+[node name="GPUParticles3D" type="GPUParticles3D" parent="Camera3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.778385, 6.23872, 60.7201)
+top_level = true
+amount = 5000
+lifetime = 2.0
+preprocess = 1.0
+speed_scale = 1.1
+interpolate = false
+process_material = SubResource("ParticleProcessMaterial_qktft")
+draw_pass_1 = SubResource("QuadMesh_cpdto")
+
+[node name="RemoteTransform3D" type="RemoteTransform3D" parent="Camera3D"]
+remote_path = NodePath("../GPUParticles3D")
+update_rotation = false
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="."]
 transform = Transform3D(0.604627, 0.796509, 0, -0.796509, 0.604627, 0, 0, 0, 1, 0, 0, 0)
@@ -91,20 +140,24 @@ rotation_speed = Vector3(20, 20, 20)
 transform = Transform3D(100, 0, 0, 0, 100, 0, 0, 0, 45, 0, -1.93844, 0)
 mesh = SubResource("PlaneMesh_xdvk6")
 
-[node name="bridge" parent="." instance=ExtResource("7_0x3if")]
-
 [node name="MeshInstance3D4" type="MeshInstance3D" parent="."]
-transform = Transform3D(-8.74228e-06, -200, 0, 200, -8.74228e-06, 0, 0, 0, 200, 0, 0, -96.5056)
+transform = Transform3D(-9.73486e-06, -241.607, 0, 222.708, -1.0561e-05, 0, 0, 0, 200, 0, 0, -125.652)
+mesh = SubResource("QuadMesh_wr3iy")
+
+[node name="MeshInstance3D8" type="MeshInstance3D" parent="."]
+transform = Transform3D(-222.708, 0, 1.74846e-05, 0, 241.607, 0, -1.94697e-05, 0, -200, 0, 0, 118.222)
 mesh = SubResource("QuadMesh_wr3iy")
 
 [node name="MeshInstance3D5" type="MeshInstance3D" parent="."]
-transform = Transform3D(3.82137e-13, 8.74228e-06, 200, 200, -8.74228e-06, 0, 8.74228e-06, 200, -8.74228e-06, -93.8415, 0, -3.61224)
+transform = Transform3D(4.65256e-13, 1.54925e-05, 200, 243.502, -1.54925e-05, 0, 1.06438e-05, 354.427, -8.74228e-06, -117.929, 0, -3.61224)
 mesh = SubResource("QuadMesh_wr3iy")
 
 [node name="MeshInstance3D6" type="MeshInstance3D" parent="."]
-transform = Transform3D(3.82137e-13, 8.74228e-06, -200, 200, -8.74228e-06, 0, -8.74228e-06, -200, -8.74228e-06, 90.5073, 0, -2.60207)
+transform = Transform3D(4.1046e-13, 1.61184e-05, -200, 214.823, -1.61184e-05, 0, -9.39023e-06, -368.746, -8.74228e-06, 143.598, 0, -2.60207)
 mesh = SubResource("QuadMesh_wr3iy")
 
 [node name="MeshInstance3D7" type="MeshInstance3D" parent="."]
-transform = Transform3D(200, 0, 0, 0, -8.74228e-06, -200, 0, 200, -8.74228e-06, 0, 96.845, -12.8846)
+transform = Transform3D(440.815, 0, 0, 0, -1.59531e-05, -200, 0, 364.965, -8.74228e-06, 0, 96.845, -12.8846)
 mesh = SubResource("QuadMesh_wr3iy")
+
+[node name="bridge" parent="." instance=ExtResource("7_qho57")]

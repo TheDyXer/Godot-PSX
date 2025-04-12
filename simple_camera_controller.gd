@@ -66,7 +66,7 @@ func _input(event: InputEvent) -> void:
 	if event is InputEventMouseMotion and Input.is_mouse_button_pressed(MOUSE_BUTTON_RIGHT):
 		var mouse_movement = event.relative * get_process_delta_time()
 
-		target_camera_state.angles += Vector3(-mouse_movement.y, -mouse_movement.x, 0.0)
+		target_camera_state.angles += Vector3(-mouse_movement.y, -mouse_movement.x, 0.0) * 0.25
 
 		var rotation_lerp_percent = 1.0 - exp((log(1.0 - 0.99) / rotation_lerp_time) * get_process_delta_time())
 

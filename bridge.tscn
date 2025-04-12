@@ -1,16 +1,23 @@
-[gd_scene load_steps=4 format=3 uid="uid://c7bcg0r53m6bs"]
+[gd_scene load_steps=5 format=3 uid="uid://b5ellqltyo0oc"]
 
-[ext_resource type="PackedScene" uid="uid://cpigjo1c7yjgf" path="res://bridge.glb" id="1_qxpoc"]
-[ext_resource type="Shader" path="res://playstation_one.gdshader" id="2_ndwap"]
+[ext_resource type="PackedScene" uid="uid://bcnwa4p24a404" path="res://bridge.glb" id="1_u24er"]
+[ext_resource type="Shader" path="res://playstation_one.gdshader" id="2_pxf1l"]
+[ext_resource type="Texture2D" uid="uid://n870ndxae1go" path="res://bridge_texture.png" id="3_r2i4f"]
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_ary1p"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_8xhcy"]
 render_priority = 0
-shader = ExtResource("2_ndwap")
-shader_parameter/tint = Color(0.413608, 0.273162, 0.171629, 1)
-shader_parameter/fog_start_end = Vector2(0, 250)
-shader_parameter/fog_color = Color(0.31, 0.286233, 0.2387, 1)
+shader = ExtResource("2_pxf1l")
+shader_parameter/billboard = false
+shader_parameter/tint = Color(1, 1, 1, 1)
+shader_parameter/fog_start_end = Vector2(0, 125)
+shader_parameter/fog_color = Color(0.219608, 0.211765, 0.172549, 1)
+shader_parameter/add_dynamic_vertex_lighting = false
+shader_parameter/light_direction = Vector3(0, 1, 0)
+shader_parameter/light_intensity = 1.0
+shader_parameter/ambient_light = Color(0, 0, 0, 1)
+shader_parameter/color_texture = ExtResource("3_r2i4f")
 
-[node name="bridge" instance=ExtResource("1_qxpoc")]
+[node name="bridge" instance=ExtResource("1_u24er")]
 
-[node name="Right Supports" parent="." index="0"]
-surface_material_override/0 = SubResource("ShaderMaterial_ary1p")
+[node name="Right Supports_002" parent="." index="0"]
+surface_material_override/0 = SubResource("ShaderMaterial_8xhcy")
