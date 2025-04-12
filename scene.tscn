@@ -1,49 +1,12 @@
-[gd_scene load_steps=20 format=3 uid="uid://bv7dsd2m7qlaq"]
+[gd_scene load_steps=22 format=3 uid="uid://bv7dsd2m7qlaq"]
 
 [ext_resource type="Shader" path="res://unlit.gdshader" id="1_6tmq6"]
 [ext_resource type="Shader" path="res://playstation_one.gdshader" id="1_btf8r"]
-[ext_resource type="Script" path="res://simple_camera_controller.gd" id="1_shf63"]
 [ext_resource type="Script" path="res://rotate.gd" id="2_ekg6g"]
 [ext_resource type="PackedScene" uid="uid://c3yabv6fibd2n" path="res://psx_terrain.tscn" id="5_fcwvy"]
+[ext_resource type="Script" path="res://player_controller.gd" id="6_erlwl"]
 [ext_resource type="PackedScene" uid="uid://b5ellqltyo0oc" path="res://bridge.tscn" id="7_qho57"]
-
-[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_qktft"]
-emission_shape_offset = Vector3(0, 10, 0)
-emission_shape_scale = Vector3(20, 0, 20)
-emission_shape = 3
-emission_box_extents = Vector3(1, 1, 1)
-direction = Vector3(0.75, -1, -0.1)
-spread = 21.774
-initial_velocity_min = 8.0
-initial_velocity_max = 13.5
-gravity = Vector3(0, 0, 0)
-turbulence_noise_strength = 0.1
-turbulence_influence_min = 0.251
-turbulence_influence_max = 0.298
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_6c344"]
-render_priority = 0
-shader = ExtResource("1_btf8r")
-shader_parameter/billboard = true
-shader_parameter/tint = Color(0.419608, 0.380392, 0.317647, 1)
-shader_parameter/fog_start_end = Vector2(0, 10)
-shader_parameter/fog_color = Color(0.25, 0.242083, 0.2025, 1)
-shader_parameter/add_dynamic_vertex_lighting = false
-shader_parameter/light_direction = Vector3(0, 1, 0)
-shader_parameter/light_intensity = 1.0
-shader_parameter/ambient_light = Color(0, 0, 0, 1)
-
-[sub_resource type="QuadMesh" id="QuadMesh_cpdto"]
-material = SubResource("ShaderMaterial_6c344")
-size = Vector2(0.075, 0.075)
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_k15i2"]
-
-[sub_resource type="BoxMesh" id="BoxMesh_3ta6q"]
-material = SubResource("ShaderMaterial_k15i2")
-subdivide_width = 2
-subdivide_height = 2
-subdivide_depth = 2
+[ext_resource type="Script" path="res://camera_controller.gd" id="7_uv7ow"]
 
 [sub_resource type="Environment" id="Environment_teuiq"]
 background_energy_multiplier = 0.0
@@ -90,35 +53,46 @@ shader_parameter/ambient_light = Color(0, 0, 0, 1)
 [sub_resource type="QuadMesh" id="QuadMesh_wr3iy"]
 material = SubResource("ShaderMaterial_lkm78")
 
+[sub_resource type="PhysicsMaterial" id="PhysicsMaterial_1ryse"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_bewe8"]
+size = Vector3(9.2478, 1, 40.3705)
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_1wngv"]
+radius = 1.0
+height = 5.0
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_qktft"]
+emission_shape_offset = Vector3(0, 10, 0)
+emission_shape_scale = Vector3(20, 0, 20)
+emission_shape = 3
+emission_box_extents = Vector3(1, 1, 1)
+direction = Vector3(0.75, -1, -0.1)
+spread = 21.774
+initial_velocity_min = 8.0
+initial_velocity_max = 13.5
+gravity = Vector3(0, 0, 0)
+turbulence_noise_strength = 0.1
+turbulence_influence_min = 0.251
+turbulence_influence_max = 0.298
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_6c344"]
+render_priority = 0
+shader = ExtResource("1_btf8r")
+shader_parameter/billboard = true
+shader_parameter/tint = Color(0.419608, 0.380392, 0.317647, 1)
+shader_parameter/fog_start_end = Vector2(0, 10)
+shader_parameter/fog_color = Color(0.25, 0.242083, 0.2025, 1)
+shader_parameter/add_dynamic_vertex_lighting = false
+shader_parameter/light_direction = Vector3(0, 1, 0)
+shader_parameter/light_intensity = 1.0
+shader_parameter/ambient_light = Color(0, 0, 0, 1)
+
+[sub_resource type="QuadMesh" id="QuadMesh_cpdto"]
+material = SubResource("ShaderMaterial_6c344")
+size = Vector2(0.075, 0.075)
+
 [node name="Node3D" type="Node3D"]
-
-[node name="Camera3D" type="Camera3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.778385, 6.23872, 60.7201)
-fov = 60.0
-size = 2.50021
-script = ExtResource("1_shf63")
-
-[node name="GPUParticles3D" type="GPUParticles3D" parent="Camera3D"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.778385, 6.23872, 60.7201)
-top_level = true
-amount = 5000
-lifetime = 2.0
-preprocess = 1.0
-speed_scale = 1.1
-interpolate = false
-process_material = SubResource("ParticleProcessMaterial_qktft")
-draw_pass_1 = SubResource("QuadMesh_cpdto")
-
-[node name="RemoteTransform3D" type="RemoteTransform3D" parent="Camera3D"]
-remote_path = NodePath("../GPUParticles3D")
-update_rotation = false
-
-[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
-transform = Transform3D(0.604627, 0.796509, 0, -0.796509, 0.604627, 0, 0, 0, 1, 0, 0, 0)
-visible = false
-mesh = SubResource("BoxMesh_3ta6q")
-script = ExtResource("2_ekg6g")
-rotation_speed = Vector3(20, 20, 20)
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 0.723449, 0.690377, 0, -0.690377, 0.723449, 0.954669, 1.12925, 3.35693)
@@ -161,3 +135,41 @@ transform = Transform3D(440.815, 0, 0, 0, -1.59531e-05, -200, 0, 364.965, -8.742
 mesh = SubResource("QuadMesh_wr3iy")
 
 [node name="bridge" parent="." instance=ExtResource("7_qho57")]
+
+[node name="StaticBody3D" type="StaticBody3D" parent="."]
+physics_material_override = SubResource("PhysicsMaterial_1ryse")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="StaticBody3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.181172, 2.61842, 3.00051)
+shape = SubResource("BoxShape3D_bewe8")
+
+[node name="CollisionShape3D2" type="CollisionShape3D" parent="StaticBody3D"]
+transform = Transform3D(1, 0, 0, 0, 0.998629, -0.052336, 0, 0.052336, 0.998629, -0.181172, 1.54298, 43.3257)
+shape = SubResource("BoxShape3D_bewe8")
+
+[node name="CollisionShape3D3" type="CollisionShape3D" parent="StaticBody3D"]
+transform = Transform3D(1, 0, 0, 0, 0.999123, 0.0418756, 0, -0.0418756, 0.999123, -0.181, 1.76955, -37.3497)
+shape = SubResource("BoxShape3D_bewe8")
+
+[node name="CharacterBody3D" type="CharacterBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 6.55649, 0)
+script = ExtResource("6_erlwl")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="CharacterBody3D"]
+shape = SubResource("CapsuleShape3D_1wngv")
+
+[node name="GPUParticles3D" type="GPUParticles3D" parent="CharacterBody3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.99961, 0)
+amount = 5000
+lifetime = 2.0
+preprocess = 1.0
+speed_scale = 1.1
+interpolate = false
+process_material = SubResource("ParticleProcessMaterial_qktft")
+draw_pass_1 = SubResource("QuadMesh_cpdto")
+
+[node name="Camera3D" type="Camera3D" parent="CharacterBody3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.48757, 0)
+fov = 60.0
+size = 2.50021
+script = ExtResource("7_uv7ow")
