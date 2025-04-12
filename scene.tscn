@@ -1,4 +1,4 @@
-[gd_scene load_steps=26 format=3 uid="uid://bv7dsd2m7qlaq"]
+[gd_scene load_steps=27 format=3 uid="uid://bv7dsd2m7qlaq"]
 
 [ext_resource type="Shader" path="res://unlit.gdshader" id="1_6tmq6"]
 [ext_resource type="Shader" path="res://playstation_one.gdshader" id="1_btf8r"]
@@ -8,6 +8,7 @@
 [ext_resource type="PackedScene" uid="uid://b5ellqltyo0oc" path="res://bridge.tscn" id="7_qho57"]
 [ext_resource type="Script" path="res://camera_controller.gd" id="7_uv7ow"]
 [ext_resource type="AudioStream" uid="uid://x0vfjoxerpfb" path="res://footstep.wav" id="8_ub22p"]
+[ext_resource type="AudioStream" uid="uid://coppaqgawptht" path="res://wind.wav" id="9_ujs63"]
 
 [sub_resource type="Environment" id="Environment_teuiq"]
 background_energy_multiplier = 0.0
@@ -208,6 +209,11 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.911508, 0)
 stream = ExtResource("8_ub22p")
 volume_db = -10.191
 max_db = -4.395
+
+[node name="Wind" type="AudioStreamPlayer3D" parent="Player"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.911508, 0)
+stream = ExtResource("9_ujs63")
+max_db = 0.0
 
 [node name="World Bounds" type="StaticBody3D" parent="."]
 

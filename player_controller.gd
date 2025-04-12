@@ -9,6 +9,11 @@ var rng = RandomNumberGenerator.new();
 func _ready() -> void:
 	DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_MAXIMIZED)
 
+func _process(delta: float) -> void:
+	var wind = $Wind;
+	if not wind.playing:
+		wind.playing = true
+
 func _physics_process(delta: float) -> void:
 	if not is_on_floor():
 		velocity += get_gravity() * delta
