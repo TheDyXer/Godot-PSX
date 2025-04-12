@@ -2,6 +2,10 @@ extends CharacterBody3D
 
 const SPEED = 10.0
 
+var time_since_last_played : float = 0.0
+
+var rng = RandomNumberGenerator.new();
+
 func _ready() -> void:
 	DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_MAXIMIZED)
 
@@ -18,9 +22,17 @@ func _physics_process(delta: float) -> void:
 	if direction:
 		velocity.x = direction.x * SPEED
 		velocity.z = direction.z * SPEED
+
+		if time_since_last_played > (0.5 + rng.randf_range(-0.1, 0.1)):
+			var audio = $AudioStreamPlayer3D
+
+			audio.playing = true
+			time_since_last_played = 0.0;
 	else:
 		velocity.x = move_toward(velocity.x, 0, SPEED)
 		velocity.z = move_toward(velocity.z, 0, SPEED)
+
+	time_since_last_played += delta;
 
 	move_and_slide()
 
