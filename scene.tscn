@@ -37,6 +37,7 @@ shader_parameter/add_dynamic_vertex_lighting = true
 shader_parameter/light_direction = Vector3(0, 1, 0)
 shader_parameter/light_intensity = 1.0
 shader_parameter/ambient_light = Color(0, 0, 0, 1)
+shader_parameter/dither_spread = 0.0045
 
 [sub_resource type="PlaneMesh" id="PlaneMesh_xdvk6"]
 material = SubResource("ShaderMaterial_gbew5")
@@ -54,6 +55,7 @@ shader_parameter/add_dynamic_vertex_lighting = true
 shader_parameter/light_direction = Vector3(0, 1, 0)
 shader_parameter/light_intensity = 1.0
 shader_parameter/ambient_light = Color(0, 0, 0, 1)
+shader_parameter/dither_spread = 0.0045
 
 [sub_resource type="QuadMesh" id="QuadMesh_wr3iy"]
 material = SubResource("ShaderMaterial_lkm78")
@@ -95,6 +97,7 @@ shader_parameter/add_dynamic_vertex_lighting = false
 shader_parameter/light_direction = Vector3(0, 1, 0)
 shader_parameter/light_intensity = 1.0
 shader_parameter/ambient_light = Color(0, 0, 0, 1)
+shader_parameter/dither_spread = 0.0045
 
 [sub_resource type="QuadMesh" id="QuadMesh_cpdto"]
 material = SubResource("ShaderMaterial_6c344")

@@ -9,10 +9,12 @@ uniform vec3 tint : source_color = vec3(1);
 uniform vec2 fog_start_end = vec2(10, 100);
 uniform vec3 fog_color : source_color = vec3(0.42, 0.42, 0.45);
 
-uniform bool add_dynamic_vertex_lighting = true;
+uniform bool add_dynamic_vertex_lighting = false;
 uniform vec3 light_direction = vec3(0, 1, 0);
 uniform float light_intensity = 1.0;
 uniform vec3 ambient_light : source_color = vec3(0);
+
+uniform float dither_spread = 0.0045;
 
 
 varying vec4 clip_pos;
@@ -45,14 +47,15 @@ void vertex() {
 	
 	POSITION = vertex;
 	
-	// Need to hold on to clip.w
+	// Need to hold on to clip.w to reverse perspective corrections
 	clip_pos = vertex;
 	
 	// Calculate vertex distance from camera
 	view_distance = length(CAMERA_POSITION_WORLD - world_space.xyz);
 	
-	//UV = UV * vec2(3.0, 2.0)
+	// Multiply by perspective correction to undo it in fragment shader
 	UV = UV * clip_pos.w;
+	
 	NORMAL = MODEL_NORMAL_MATRIX * NORMAL;
 	
 	if (add_dynamic_vertex_lighting) {
@@ -86,7 +89,7 @@ void fragment() {
 	
 	float noise = float(bayer[(int(FRAGCOORD.x) % 4) + (int(FRAGCOORD.y) % 4) * 4]) * (1.0 / 16.0) - 0.5;
 	
-	vec3 quantized = pow(fogged + 0.0045 * noise, vec3(1.0 / 2.2));
+	vec3 quantized = pow(fogged + dither_spread * noise, vec3(1.0 / 2.2));
 	
 	quantized.r = floor((32.0 - 1.0) * quantized.r + 0.5) / (32.0 - 1.0);
 	quantized.g = floor((64.0 - 1.0) * quantized.g + 0.5) / (64.0 - 1.0);
@@ -105,4 +108,5 @@ void fragment() {
 
 void light() {
 	DIFFUSE_LIGHT = vec3(1);
+	SPECULAR_LIGHT = vec3(0);
 }
