@@ -6,16 +6,23 @@ uniform bool billboard = false;
 uniform sampler2D color_texture : source_color, filter_nearest, repeat_disable;
 
 uniform vec3 tint : source_color = vec3(1);
-uniform vec2 fog_start_end = vec2(10, 100);
-uniform vec3 fog_color : source_color = vec3(0.42, 0.42, 0.45);
 
+group_uniforms Fog;
+uniform vec3 fog_color : source_color = vec3(0.42, 0.42, 0.45);
+uniform vec2 fog_start_end = vec2(10, 100);
+group_uniforms;
+
+group_uniforms Light;
 uniform bool add_dynamic_vertex_lighting = false;
 uniform vec3 light_direction = vec3(0, 1, 0);
 uniform float light_intensity = 1.0;
 uniform vec3 ambient_light : source_color = vec3(0);
+group_uniforms;
 
+group_uniforms Dither;
 uniform float dither_spread = 0.0045;
-
+uniform ivec3 color_quantization = ivec3(32, 64, 32);
+group_uniforms;
 
 varying vec4 clip_pos;
 varying float view_distance;
@@ -87,23 +94,19 @@ void fragment() {
     		15, 7, 13, 5
 	};
 	
+	// Index bayer matrix based on screen coordinates
 	float noise = float(bayer[(int(FRAGCOORD.x) % 4) + (int(FRAGCOORD.y) % 4) * 4]) * (1.0 / 16.0) - 0.5;
 	
+	// Apply bayer dithering and convert to srgb
 	vec3 quantized = pow(fogged + dither_spread * noise, vec3(1.0 / 2.2));
 	
-	quantized.r = floor((32.0 - 1.0) * quantized.r + 0.5) / (32.0 - 1.0);
-	quantized.g = floor((64.0 - 1.0) * quantized.g + 0.5) / (64.0 - 1.0);
-	quantized.b = floor((32.0 - 1.0) * quantized.b + 0.5) / (32.0 - 1.0);
+	// Quantize color to 16 bit or whatever is set in uniforms
+	quantized.r = floor((float(color_quantization.r) - 1.0) * quantized.r + 0.5) / (float(color_quantization.r) - 1.0);
+	quantized.g = floor((float(color_quantization.g) - 1.0) * quantized.g + 0.5) / (float(color_quantization.g) - 1.0);
+	quantized.b = floor((float(color_quantization.b) - 1.0) * quantized.b + 0.5) / (float(color_quantization.b) - 1.0);
 	
-	ALBEDO = quantized;
-	ALBEDO = pow(ALBEDO, vec3(2.2));
-	//ALBEDO = fogged;
-	
-	//ALBEDO = vec3(fog_factor);
-	
-	//ALBEDO = NORMAL.xyz;
-	
-	//ALBEDO = pow(COLOR.rgb, vec3(2.2));
+	// Convert back to linear
+	ALBEDO = pow(quantized, vec3(2.2));
 }
 
 void light() {

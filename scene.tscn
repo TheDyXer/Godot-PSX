@@ -31,13 +31,14 @@ render_priority = 0
 shader = ExtResource("1_btf8r")
 shader_parameter/billboard = false
 shader_parameter/tint = Color(0.0056683, 0.0322398, 0.0460638, 1)
-shader_parameter/fog_start_end = Vector2(0, 80)
 shader_parameter/fog_color = Color(0.219608, 0.211765, 0.172549, 1)
+shader_parameter/fog_start_end = Vector2(0, 80)
 shader_parameter/add_dynamic_vertex_lighting = true
 shader_parameter/light_direction = Vector3(0, 1, 0)
 shader_parameter/light_intensity = 1.0
 shader_parameter/ambient_light = Color(0, 0, 0, 1)
-shader_parameter/dither_spread = 0.0045
+shader_parameter/dither_spread = 0.003
+shader_parameter/color_quantization = Vector3i(32, 64, 32)
 
 [sub_resource type="PlaneMesh" id="PlaneMesh_xdvk6"]
 material = SubResource("ShaderMaterial_gbew5")
@@ -49,13 +50,14 @@ render_priority = 0
 shader = ExtResource("1_btf8r")
 shader_parameter/billboard = false
 shader_parameter/tint = Color(0.219608, 0.211765, 0.172549, 1)
-shader_parameter/fog_start_end = Vector2(10, 100)
 shader_parameter/fog_color = Color(0.22, 0.21076, 0.1738, 1)
+shader_parameter/fog_start_end = Vector2(10, 100)
 shader_parameter/add_dynamic_vertex_lighting = true
 shader_parameter/light_direction = Vector3(0, 1, 0)
 shader_parameter/light_intensity = 1.0
 shader_parameter/ambient_light = Color(0, 0, 0, 1)
-shader_parameter/dither_spread = 0.0045
+shader_parameter/dither_spread = 0.002
+shader_parameter/color_quantization = Vector3i(32, 64, 32)
 
 [sub_resource type="QuadMesh" id="QuadMesh_wr3iy"]
 material = SubResource("ShaderMaterial_lkm78")
@@ -73,11 +75,11 @@ radius = 1.0
 height = 5.0
 
 [sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_qktft"]
-emission_shape_offset = Vector3(0, 10, 0)
-emission_shape_scale = Vector3(20, 0, 20)
+emission_shape_offset = Vector3(0, 4, 0)
+emission_shape_scale = Vector3(20, 5, 20)
 emission_shape = 3
 emission_box_extents = Vector3(1, 1, 1)
-direction = Vector3(0.75, -1, -0.1)
+direction = Vector3(2.5, -1, -0.1)
 spread = 21.774
 initial_velocity_min = 8.0
 initial_velocity_max = 13.5
@@ -90,14 +92,15 @@ turbulence_influence_max = 0.298
 render_priority = 0
 shader = ExtResource("1_btf8r")
 shader_parameter/billboard = true
-shader_parameter/tint = Color(0.419608, 0.380392, 0.317647, 1)
-shader_parameter/fog_start_end = Vector2(0, 10)
+shader_parameter/tint = Color(0.398028, 0.384033, 0.361703, 1)
 shader_parameter/fog_color = Color(0.25, 0.242083, 0.2025, 1)
+shader_parameter/fog_start_end = Vector2(0, 10)
 shader_parameter/add_dynamic_vertex_lighting = false
 shader_parameter/light_direction = Vector3(0, 1, 0)
 shader_parameter/light_intensity = 1.0
 shader_parameter/ambient_light = Color(0, 0, 0, 1)
-shader_parameter/dither_spread = 0.0045
+shader_parameter/dither_spread = 0.018
+shader_parameter/color_quantization = Vector3i(16, 32, 16)
 
 [sub_resource type="QuadMesh" id="QuadMesh_cpdto"]
 material = SubResource("ShaderMaterial_6c344")
