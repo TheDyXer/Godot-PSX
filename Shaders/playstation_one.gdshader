@@ -20,8 +20,9 @@ uniform vec3 ambient_light : source_color = vec3(0);
 group_uniforms;
 
 group_uniforms Dither;
-uniform float dither_spread = 0.0045;
-uniform ivec3 color_quantization = ivec3(32, 64, 32);
+uniform bool add_dither = true;
+uniform float dither_spread = 1.0;
+uniform float dither_gamma = 1.0;
 group_uniforms;
 
 varying vec4 clip_pos;
@@ -71,42 +72,48 @@ void vertex() {
 		vec3 light = ambient_light + direct_light * light_intensity;
 		COLOR.rgb *= clamp(light, vec3(0), vec3(1));
 	}
+	
+	COLOR *= clip_pos.w;
 }
 
 void fragment() {
+	// Undo perspective correction
+	vec2 uv = UV / clip_pos.w;
+	
 	// Calculate linear fog factor
 	float fog_factor = (fog_start_end.y - (view_distance)) / (fog_start_end.y - fog_start_end.x);
 	fog_factor = 1.0 - clamp(fog_factor, 0.0, 1.0);
 	
-	vec3 texture_color = texture(color_texture, (UV / clip_pos.w)).rgb;
+	vec3 texture_color = texture(color_texture, uv).rgb;
 	
-	vec3 vertex_color = COLOR.rgb;
+	vec3 vertex_color = COLOR.rgb / clip_pos.w;
 	
 	vec3 albedo = texture_color * vertex_color * tint;
 	
 	vec3 fogged = mix(albedo, fog_color, fog_factor);
 	fogged = clamp(fogged, vec3(0), vec3(1));
 	
-	int bayer[16] = {
-    		0, 8, 2, 10,
-    		12, 4, 14, 6,
-    		3, 11, 1, 9,
-    		15, 7, 13, 5
-	};
+	vec3 quantized = fogged;
 	
-	// Index bayer matrix based on screen coordinates
-	float noise = float(bayer[(int(FRAGCOORD.x) % 4) + (int(FRAGCOORD.y) % 4) * 4]) * (1.0 / 16.0) - 0.5;
+	if (add_dither) {	
+		int ps1_dither_matrix[16] = {
+	    		-4, 0, -3, 1,
+	    		2, -2, 3, -1,
+	    		-3, 1, -4, 0,
+	    		3, -1, 2, -2
+		};
+		
+		// Index dither matrix based on screen coordinates
+		float noise = float(ps1_dither_matrix[(int(FRAGCOORD.x) % 4) + (int(FRAGCOORD.y) % 4) * 4]);
+		
+		// Apply dithering and quantize 24 bit srgb to 15 bit srgb according to https://psx-spx.consoledev.net/graphicsprocessingunitgpu/
+		quantized = clamp(pow(fogged, vec3(1.0 / dither_gamma)) * 255.0 + noise * dither_spread, vec3(0), vec3(255)) / 8.0;
+		quantized /= 32.0; // above line of code is in 0-32 range, divide by 32 back to 0 to 1 color range
+		
+		quantized = pow(quantized, vec3(dither_gamma)); // Convert back to linear
+	}
 	
-	// Apply bayer dithering and convert to srgb
-	vec3 quantized = pow(fogged + dither_spread * noise, vec3(1.0 / 2.2));
-	
-	// Quantize color to 16 bit or whatever is set in uniforms
-	quantized.r = floor((float(color_quantization.r) - 1.0) * quantized.r + 0.5) / (float(color_quantization.r) - 1.0);
-	quantized.g = floor((float(color_quantization.g) - 1.0) * quantized.g + 0.5) / (float(color_quantization.g) - 1.0);
-	quantized.b = floor((float(color_quantization.b) - 1.0) * quantized.b + 0.5) / (float(color_quantization.b) - 1.0);
-	
-	// Convert back to linear
-	ALBEDO = pow(quantized, vec3(2.2));
+	ALBEDO = quantized;
 }
 
 void light() {
