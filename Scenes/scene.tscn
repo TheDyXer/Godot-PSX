@@ -1,4 +1,4 @@
-[gd_scene load_steps=27 format=3 uid="uid://bv7dsd2m7qlaq"]
+[gd_scene load_steps=28 format=3 uid="uid://bv7dsd2m7qlaq"]
 
 [ext_resource type="Script" path="res://Scripts/rotate.gd" id="1_k7e4a"]
 [ext_resource type="PackedScene" uid="uid://c3yabv6fibd2n" path="res://Scenes/psx_terrain.tscn" id="2_5fcxn"]
@@ -8,6 +8,7 @@
 [ext_resource type="Script" path="res://Scripts/camera_controller.gd" id="6_awl02"]
 [ext_resource type="AudioStream" uid="uid://x0vfjoxerpfb" path="res://Audio/footstep.wav" id="7_m4t70"]
 [ext_resource type="AudioStream" uid="uid://coppaqgawptht" path="res://Audio/wind.wav" id="8_1oqbq"]
+[ext_resource type="AudioStream" uid="uid://2qrkdui7n1cs" path="res://Audio/pavane_mixdown.mp3" id="10_re5t5"]
 
 [sub_resource type="Environment" id="Environment_teuiq"]
 background_energy_multiplier = 0.0
@@ -27,14 +28,21 @@ material = SubResource("ShaderMaterial_0igg6")
 [sub_resource type="BoxShape3D" id="BoxShape3D_d6x5a"]
 size = Vector3(301.83, 4.57336, 66.8489)
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_gbew5"]
+[sub_resource type="PlaneMesh" id="PlaneMesh_xdvk6"]
+subdivide_width = 50
+subdivide_depth = 20
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_te28y"]
 render_priority = 0
 shader = ExtResource("3_025t4")
 shader_parameter/billboard = false
-shader_parameter/tint = Color(0.0056683, 0.0322398, 0.0460638, 1)
+shader_parameter/tint = Color(0.0980392, 0.0980392, 0.113725, 1)
+shader_parameter/vertex_snapping = true
+shader_parameter/affine_texture_mapping = true
+shader_parameter/add_fog = true
 shader_parameter/fog_color = Color(0.219608, 0.211765, 0.172549, 1)
-shader_parameter/fog_start_end = Vector2(0, 80)
-shader_parameter/add_dynamic_vertex_lighting = true
+shader_parameter/fog_start_end = Vector2(0, 50)
+shader_parameter/add_dynamic_vertex_lighting = false
 shader_parameter/light_direction = Vector3(0, 1, 0)
 shader_parameter/light_intensity = 1.0
 shader_parameter/ambient_light = Color(0, 0, 0, 1)
@@ -42,16 +50,14 @@ shader_parameter/add_dither = true
 shader_parameter/dither_spread = 1.0
 shader_parameter/dither_gamma = 2.2
 
-[sub_resource type="PlaneMesh" id="PlaneMesh_xdvk6"]
-material = SubResource("ShaderMaterial_gbew5")
-subdivide_width = 20
-subdivide_depth = 15
-
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_lkm78"]
 render_priority = 0
 shader = ExtResource("3_025t4")
 shader_parameter/billboard = false
 shader_parameter/tint = Color(0.219608, 0.211765, 0.172549, 1)
+shader_parameter/vertex_snapping = true
+shader_parameter/affine_texture_mapping = true
+shader_parameter/add_fog = true
 shader_parameter/fog_color = Color(0.22, 0.21076, 0.1738, 1)
 shader_parameter/fog_start_end = Vector2(10, 100)
 shader_parameter/add_dynamic_vertex_lighting = true
@@ -95,9 +101,12 @@ turbulence_influence_max = 0.298
 render_priority = 0
 shader = ExtResource("3_025t4")
 shader_parameter/billboard = true
-shader_parameter/tint = Color(0.398028, 0.384033, 0.361703, 1)
+shader_parameter/tint = Color(0.340281, 0.327697, 0.307616, 1)
+shader_parameter/vertex_snapping = true
+shader_parameter/affine_texture_mapping = true
+shader_parameter/add_fog = false
 shader_parameter/fog_color = Color(0.25, 0.242083, 0.2025, 1)
-shader_parameter/fog_start_end = Vector2(0, 10)
+shader_parameter/fog_start_end = Vector2(0, 5)
 shader_parameter/add_dynamic_vertex_lighting = false
 shader_parameter/light_direction = Vector3(0, 1, 0)
 shader_parameter/light_intensity = 1.0
@@ -115,7 +124,7 @@ size = Vector2(0.075, 0.075)
 [node name="Node3D" type="Node3D"]
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 0.723449, 0.690377, 0, -0.690377, 0.723449, 0.954669, 1.12925, 3.35693)
+transform = Transform3D(1, 0, 0, 0, 0.723449, 0.690377, 0, -0.690377, 0.723449, 0.954669, -1.33543, 3.35693)
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = SubResource("Environment_teuiq")
@@ -143,6 +152,7 @@ shape = SubResource("BoxShape3D_d6x5a")
 [node name="MeshInstance3D3" type="MeshInstance3D" parent="."]
 transform = Transform3D(250, 0, 0, 0, 100, 0, 0, 0, 45, 0, -2.55434, -1.48462)
 mesh = SubResource("PlaneMesh_xdvk6")
+surface_material_override/0 = SubResource("ShaderMaterial_te28y")
 
 [node name="MeshInstance3D4" type="MeshInstance3D" parent="."]
 transform = Transform3D(-9.73488e-06, -500, 0, 222.708, -2.18557e-05, 0, 0, 0, 200, 0, 0, -221.176)
@@ -214,7 +224,7 @@ interpolate = false
 process_material = SubResource("ParticleProcessMaterial_qktft")
 draw_pass_1 = SubResource("QuadMesh_cpdto")
 
-[node name="AudioStreamPlayer3D" type="AudioStreamPlayer3D" parent="Player"]
+[node name="Feet" type="AudioStreamPlayer3D" parent="Player"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.911508, 0)
 stream = ExtResource("7_m4t70")
 volume_db = -10.191
@@ -224,6 +234,10 @@ max_db = -4.395
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.911508, 0)
 stream = ExtResource("8_1oqbq")
 max_db = 0.0
+
+[node name="Music" type="AudioStreamPlayer3D" parent="Player"]
+stream = ExtResource("10_re5t5")
+volume_db = -20.456
 
 [node name="World Bounds" type="StaticBody3D" parent="."]
 

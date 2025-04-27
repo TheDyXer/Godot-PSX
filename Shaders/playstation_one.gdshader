@@ -7,7 +7,11 @@ uniform sampler2D color_texture : source_color, filter_nearest, repeat_disable;
 
 uniform vec3 tint : source_color = vec3(1);
 
+uniform bool vertex_snapping = true;
+uniform bool affine_texture_mapping = true;
+
 group_uniforms Fog;
+uniform bool add_fog = false;
 uniform vec3 fog_color : source_color = vec3(0.42, 0.42, 0.45);
 uniform vec2 fog_start_end = vec2(10, 100);
 group_uniforms;
@@ -26,7 +30,7 @@ uniform float dither_gamma = 1.0;
 group_uniforms;
 
 varying vec4 clip_pos;
-varying float view_distance;
+varying float FOG_FACTOR;
 
 void vertex() {
 	mat4 model_matrix = MODEL_MATRIX;
@@ -49,20 +53,23 @@ void vertex() {
 	
 	vec4 clip = PROJECTION_MATRIX * VIEW_MATRIX * world_space;
 	
-	// Snap to nearest pixel
 	vec4 vertex = clip;
-	vertex.xy = round(clip.xy / clip.w * VIEWPORT_SIZE.xy) / VIEWPORT_SIZE.xy * clip.w;
+	
+	// Snap to nearest pixel
+	if (vertex_snapping) {
+		vertex.xy = round(clip.xy / clip.w * VIEWPORT_SIZE.xy) / VIEWPORT_SIZE.xy * clip.w;
+	}
 	
 	POSITION = vertex;
 	
 	// Need to hold on to clip.w to reverse perspective corrections
 	clip_pos = vertex;
 	
-	// Calculate vertex distance from camera
-	view_distance = length(CAMERA_POSITION_WORLD - world_space.xyz);
+	// Calculate vertex distance from camera for fog
+	float view_distance = length(CAMERA_POSITION_WORLD - world_space.xyz);
+	FOG_FACTOR = (fog_start_end.y - (view_distance)) / (fog_start_end.y - fog_start_end.x);
+	FOG_FACTOR = 1.0 - clamp(FOG_FACTOR, 0.0, 1.0);
 	
-	// Multiply by perspective correction to undo it in fragment shader
-	UV = UV * clip_pos.w;
 	
 	NORMAL = MODEL_NORMAL_MATRIX * NORMAL;
 	
@@ -73,25 +80,36 @@ void vertex() {
 		COLOR.rgb *= clamp(light, vec3(0), vec3(1));
 	}
 	
-	COLOR *= clip_pos.w;
+	// Multiply by perspective correction to undo it in fragment shader
+	if (affine_texture_mapping) {
+		UV = UV * clip_pos.w;
+		COLOR *= clip_pos.w;
+		FOG_FACTOR *= clip_pos.w;
+	}
 }
 
 void fragment() {
-	// Undo perspective correction
-	vec2 uv = UV / clip_pos.w;
+	vec2 uv = UV;
+	vec3 vertex_color = COLOR.rgb;
+	float fog_factor = FOG_FACTOR;
 	
-	// Calculate linear fog factor
-	float fog_factor = (fog_start_end.y - (view_distance)) / (fog_start_end.y - fog_start_end.x);
-	fog_factor = 1.0 - clamp(fog_factor, 0.0, 1.0);
+	// Undo perspective correction
+	if (affine_texture_mapping) {
+		uv /= clip_pos.w;
+		vertex_color /= clip_pos.w;
+		fog_factor /= clip_pos.w;
+	}
 	
 	vec3 texture_color = texture(color_texture, uv).rgb;
 	
-	vec3 vertex_color = COLOR.rgb / clip_pos.w;
-	
 	vec3 albedo = texture_color * vertex_color * tint;
 	
-	vec3 fogged = mix(albedo, fog_color, fog_factor);
-	fogged = clamp(fogged, vec3(0), vec3(1));
+	vec3 fogged = albedo;
+	
+	if (add_fog) {
+		fogged = mix(albedo, fog_color, fog_factor);
+		fogged = clamp(fogged, vec3(0), vec3(1));
+	}
 	
 	vec3 quantized = fogged;
 	
@@ -103,12 +121,15 @@ void fragment() {
 	    		3, -1, 2, -2
 		};
 		
-		// Index dither matrix based on screen coordinates
+		// Index 1D dither matrix based on 2D screen coordinates
 		float noise = float(ps1_dither_matrix[(int(FRAGCOORD.x) % 4) + (int(FRAGCOORD.y) % 4) * 4]);
 		
 		// Apply dithering and quantize 24 bit srgb to 15 bit srgb according to https://psx-spx.consoledev.net/graphicsprocessingunitgpu/
-		quantized = clamp(pow(fogged, vec3(1.0 / dither_gamma)) * 255.0 + noise * dither_spread, vec3(0), vec3(255)) / 8.0;
-		quantized /= 32.0; // above line of code is in 0-32 range, divide by 32 back to 0 to 1 color range
+		quantized = pow(fogged, vec3(1.0 / dither_gamma)); // Convert to srgb cause it imo looks better and is probably correct idk looks more correct than linear quantization
+		quantized = round(quantized * 255.0 + noise); // Convert to 0-255 and add dither noise
+		quantized = clamp(round(quantized), vec3(0), vec3(255)); // Clamp to 0-255 in case of overflow
+		quantized = clamp(quantized / 8.0, vec3(0), vec3(31)); // Convert to 0-31 range
+		quantized /= 31.0; // Convert back to 0-1 range
 		
 		quantized = pow(quantized, vec3(dither_gamma)); // Convert back to linear
 	}

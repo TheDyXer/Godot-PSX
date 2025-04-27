@@ -12,7 +12,11 @@ func _ready() -> void:
 func _process(delta: float) -> void:
 	var wind = $Wind;
 	if not wind.playing:
-		wind.playing = true
+		wind.playing = true;
+		
+	var music = $Music;
+	if not music.playing:
+		music.play();
 
 func _physics_process(delta: float) -> void:
 	if not is_on_floor():
@@ -29,7 +33,7 @@ func _physics_process(delta: float) -> void:
 		velocity.z = direction.z * SPEED
 
 		if time_since_last_played > (0.5 + rng.randf_range(-0.1, 0.1)):
-			var audio = $AudioStreamPlayer3D
+			var audio = $Feet
 
 			audio.playing = true
 			time_since_last_played = 0.0;
