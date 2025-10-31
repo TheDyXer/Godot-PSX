@@ -1,0 +1,18 @@
+; Engine configuration file.
+; It's recommended to edit this file with the editor.
+
+[application]
+config/name="Godot-PSX Engine"
+config/icon="res://icon.png"
+
+[rendering]
+quality/shading_mode="high_quality"
+
+[autoload]
+# Define any autoloaded resources here.
+
+[gui]
+# GUI settings can be added here.
+
+[input]
+# Input map settings can be added here.
